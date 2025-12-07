@@ -49,43 +49,6 @@ export const googleCallback=async(req,res)=>{
 
 
 
-// export const googleCallback = async (req, res) => {
-//   console.log("googleCallback hit - query:", req.query);
-//   try {
-//     const code = req.query.code;
-//     if (!code) return res.status(400).send("No code received");
-
-//     console.log("exchanging code for tokens...");
-
-//     // small timeout wrapper so we can detect hang
-//     const getTokenWithTimeout = (code, ms = 10000) => {
-//       const p = oauth2Client.getToken(code);
-//       const timeout = new Promise((_, rej) =>
-//         setTimeout(() => rej(new Error("getToken timeout")), ms)
-//       );
-//       return Promise.race([p, timeout]);
-//     };
-
-//     const tokenResult = await getTokenWithTimeout(code, 10000);
-//     const tokens = tokenResult.tokens || tokenResult; // some versions return {tokens}
-
-//     console.log("got tokens keys:", Object.keys(tokens || {}));
-//     console.log("has refresh_token?", !!tokens.refresh_token);
-
-//     // persist tokens
-//     req.session.tokens = tokens;
-//     console.log("saved tokens to session");
-
-//     // set credentials & redirect
-//     oauth2Client.setCredentials(tokens);
-//     console.log("redirecting to /");
-//     return res.redirect("/");
-//   } catch (err) {
-//     console.error("OAuth callback error (detailed):", err?.response?.data || err.message || err);
-//     // send a readable response so browser doesn't hang
-//     return res.status(500).send("Auth callback error: " + (err.message || "unknown"));
-//   }
-// };
 
 
 
