@@ -4,13 +4,13 @@ import session from "express-session";
 import authRoutes from "./routes/auth.routes.js" ;
 import feedRoutes from "./routes/feed.routes.js"; 
 
-const FRONTEND_ORIGIN = process.env.FRONTEND_ORIGIN || "http://localhost:5173";
+// const FRONTEND_ORIGIN = process.env.FRONTEND_ORIGIN || "http://localhost:5173";
 
 const app = express();
 app.set("trust proxy", 1);
 app.use(express.json());
 app.use(cors({
-  origin: FRONTEND_ORIGIN,
+  origin: "https://detoxifyproject-pak9svf1o-udit-arens-projects.vercel.app/",
   credentials: true,
 }));
 
