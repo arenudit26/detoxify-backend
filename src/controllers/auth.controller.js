@@ -30,7 +30,7 @@ export const googleCallback=async(req,res)=>{
 
         oauth2Client.setCredentials(tokens);
 
-        return res.redirect("http://localhost:5173");
+        return res.redirect("https://detoxifyproject-h0sxrgk34-udit-arens-projects.vercel.app/");
 
     }
      
