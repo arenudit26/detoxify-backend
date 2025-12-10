@@ -16,14 +16,16 @@ app.use(cors({
 
 
 app.use(session({
+ name: "detoxify.sid",
   secret: process.env.SESSION_SECRET || "dev_secret",
   resave: false,
-  saveUninitialized: true,
-   cookie: {
+  saveUninitialized: false,
+  proxy: NODE_ENV === "production",
+  cookie: {
     httpOnly: true,
-    secure: false,                  
-    sameSite: "lax",                 
-    maxAge: 24 * 60 * 60 * 1000,     
+    secure: NODE_ENV === "production",
+    sameSite: NODE_ENV === "production" ? "none" : "lax",
+    maxAge: 24 * 60 * 60 * 1000,   
   } 
 }));
 
