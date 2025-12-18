@@ -26,18 +26,44 @@ const FRONTEND_ORIGIN = process.env.FRONTEND_ORIGIN ;
 
 export const loginWithGoogle = (req, res) => {
   try {
-    console.log("ENV CHECK ⬇️");
-    console.log("GOOGLE_CLIENT_ID:", process.env.GOOGLE_CLIENT_ID);
-    console.log("GOOGLE_CLIENT_SECRET:", !!process.env.GOOGLE_CLIENT_SECRET);
-    console.log("OAUTH_REDIRECT_URI:", process.env.OAUTH_REDIRECT_URI);
-    console.log("GOOGLE_CALLBACK_URL:", process.env.GOOGLE_CALLBACK_URL);
+    const oauth2Client = createOAuthClient();
 
-    return res.send("ENV CHECK DONE — see Render logs");
+    const scopes = [
+      "https://www.googleapis.com/auth/userinfo.profile",
+      "https://www.googleapis.com/auth/userinfo.email",
+      "openid"
+    ];
+
+    const url = oauth2Client.generateAuthUrl({
+      access_type: "offline",
+      prompt: "consent",
+      scope: scopes
+    });
+
+    return res.redirect(url);
   } catch (err) {
-    console.error("ENV CHECK ERROR:", err);
-    return res.status(500).send("ENV CHECK FAILED");
+    console.error("loginWithGoogle error:", err);
+    return res.status(500).send("OAuth init failed");
   }
 };
+
+
+// export const loginWithGoogle = (req, res) => {
+//   try {
+//     console.log("ENV CHECK ⬇️");
+//     console.log("GOOGLE_CLIENT_ID:", process.env.GOOGLE_CLIENT_ID);
+//     console.log("GOOGLE_CLIENT_SECRET:", !!process.env.GOOGLE_CLIENT_SECRET);
+//     console.log("OAUTH_REDIRECT_URI:", process.env.OAUTH_REDIRECT_URI);
+//     console.log("GOOGLE_CALLBACK_URL:", process.env.GOOGLE_CALLBACK_URL);
+
+//     return res.send("ENV CHECK DONE — see Render logs");
+//   } catch (err) {
+//     console.error("ENV CHECK ERROR:", err);
+//     return res.status(500).send("ENV CHECK FAILED");
+//   }
+// };
+
+
 
 
 // export const loginWithGoogle = (req, res) => {
