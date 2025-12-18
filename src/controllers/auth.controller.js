@@ -7,17 +7,17 @@ function createOAuthClient() {
   const clientSecret = process.env.GOOGLE_CLIENT_SECRET;
   const redirectUri = process.env.OAUTH_REDIRECT_URI ;
 
-  // if (!clientId || !clientSecret || !redirectUri) {
-  //   const missing = [
-  //     !clientId && "GOOGLE_CLIENT_ID",
-  //     !clientSecret && "GOOGLE_CLIENT_SECRET",
-  //     !redirectUri && "(OAUTH_REDIRECT_URI)"
-  //   ].filter(Boolean);
-  //   const msg = `Missing env vars: ${missing.join(", ")}`;
-  //   const e = new Error(msg);
-  //   e.missingEnv = true;
-  //   throw e;
-  // }
+  if (!clientId || !clientSecret || !redirectUri) {
+    const missing = [
+      !clientId && "GOOGLE_CLIENT_ID",
+      !clientSecret && "GOOGLE_CLIENT_SECRET",
+      !redirectUri && "(OAUTH_REDIRECT_URI)"
+    ].filter(Boolean);
+    const msg = `Missing env vars: ${missing.join(", ")}`;
+    const e = new Error(msg);
+    e.missingEnv = true;
+    throw e;
+  }
 
   return new google.auth.OAuth2(clientId, clientSecret, redirectUri);
 }
@@ -26,31 +26,47 @@ const FRONTEND_ORIGIN = process.env.FRONTEND_ORIGIN ;
 
 export const loginWithGoogle = (req, res) => {
   try {
-    const oauth2Client = createOAuthClient();
+    console.log("ENV CHECK ⬇️");
+    console.log("GOOGLE_CLIENT_ID:", process.env.GOOGLE_CLIENT_ID);
+    console.log("GOOGLE_CLIENT_SECRET:", !!process.env.GOOGLE_CLIENT_SECRET);
+    console.log("OAUTH_REDIRECT_URI:", process.env.OAUTH_REDIRECT_URI);
+    console.log("GOOGLE_CALLBACK_URL:", process.env.GOOGLE_CALLBACK_URL);
 
-    const scopes = [
-      "https://www.googleapis.com/auth/userinfo.profile",
-      "https://www.googleapis.com/auth/userinfo.email",
-      "openid"
-    ];
-
-    const url = oauth2Client.generateAuthUrl({
-      access_type: "offline",
-      prompt: "consent",
-      scope: scopes
-    });
-
-    return res.redirect(url);
+    return res.send("ENV CHECK DONE — see Render logs");
   } catch (err) {
-    console.log(err) ;
-    // console.error("loginWithGoogle error:", err && (err.missingEnv ? err.message : err.stack || err));
-  //   // If missing env, return a helpful message so you can see it in logs & browser
-  //   if (err && err.missingEnv) {
-  //     return res.status(500).send(`OAuth config error: ${err.message}`);
-  //   }
-  //   return res.status(500).send("Internal Server Error");
-  // }
+    console.error("ENV CHECK ERROR:", err);
+    return res.status(500).send("ENV CHECK FAILED");
+  }
 };
+
+
+// export const loginWithGoogle = (req, res) => {
+//   try {
+//     const oauth2Client = createOAuthClient();
+
+//     const scopes = [
+//       "https://www.googleapis.com/auth/userinfo.profile",
+//       "https://www.googleapis.com/auth/userinfo.email",
+//       "openid"
+//     ];
+
+//     const url = oauth2Client.generateAuthUrl({
+//       access_type: "offline",
+//       prompt: "consent",
+//       scope: scopes
+//     });
+
+//     return res.redirect(url);
+//   } catch (err) {
+//     console.log(err) ;
+//     // console.error("loginWithGoogle error:", err && (err.missingEnv ? err.message : err.stack || err));
+//   //   // If missing env, return a helpful message so you can see it in logs & browser
+//   //   if (err && err.missingEnv) {
+//   //     return res.status(500).send(`OAuth config error: ${err.message}`);
+//   //   }
+//   //   return res.status(500).send("Internal Server Error");
+//   // }
+// };
 
 export const googleCallback = async (req, res) => {
   try {
