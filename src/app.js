@@ -10,9 +10,24 @@ const app = express();
 app.set("trust proxy", 1);
 app.use(express.json());
 app.use(cors({
-  origin: FRONTEND_ORIGIN,
-  credentials: true,
+  origin: (origin, callback) => {
+    const allowed = [
+      "https://detoxify-frontend.onrender.com",
+      "http://localhost:5173"
+    ];
+
+    if (!origin || allowed.includes(origin)) {
+      callback(null, true);
+    } else {
+      callback(new Error("Not allowed by CORS"));
+    }
+  },
+  credentials: true
 }));
+// app.use(cors({
+//   origin: FRONTEND_ORIGIN,
+//   credentials: true,
+// }));
 
 
 app.use(session({
