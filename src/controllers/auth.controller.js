@@ -7,22 +7,22 @@ function createOAuthClient() {
   const clientSecret = process.env.GOOGLE_CLIENT_SECRET;
   const redirectUri = process.env.OAUTH_REDIRECT_URI ;
 
-  if (!clientId || !clientSecret || !redirectUri) {
-    const missing = [
-      !clientId && "GOOGLE_CLIENT_ID",
-      !clientSecret && "GOOGLE_CLIENT_SECRET",
-      !redirectUri && "(OAUTH_REDIRECT_URI)"
-    ].filter(Boolean);
-    const msg = `Missing env vars: ${missing.join(", ")}`;
-    const e = new Error(msg);
-    e.missingEnv = true;
-    throw e;
-  }
+  // if (!clientId || !clientSecret || !redirectUri) {
+  //   const missing = [
+  //     !clientId && "GOOGLE_CLIENT_ID",
+  //     !clientSecret && "GOOGLE_CLIENT_SECRET",
+  //     !redirectUri && "(OAUTH_REDIRECT_URI)"
+  //   ].filter(Boolean);
+  //   const msg = `Missing env vars: ${missing.join(", ")}`;
+  //   const e = new Error(msg);
+  //   e.missingEnv = true;
+  //   throw e;
+  // }
 
   return new google.auth.OAuth2(clientId, clientSecret, redirectUri);
 }
 
-const FRONTEND_ORIGIN = process.env.FRONTEND_ORIGIN || "http://localhost:5173";
+const FRONTEND_ORIGIN = process.env.FRONTEND_ORIGIN ;
 
 export const loginWithGoogle = (req, res) => {
   try {
@@ -42,13 +42,14 @@ export const loginWithGoogle = (req, res) => {
 
     return res.redirect(url);
   } catch (err) {
-    console.error("loginWithGoogle error:", err && (err.missingEnv ? err.message : err.stack || err));
-    // If missing env, return a helpful message so you can see it in logs & browser
-    if (err && err.missingEnv) {
-      return res.status(500).send(`OAuth config error: ${err.message}`);
-    }
-    return res.status(500).send("Internal Server Error");
-  }
+    console.log(err) ;
+    // console.error("loginWithGoogle error:", err && (err.missingEnv ? err.message : err.stack || err));
+  //   // If missing env, return a helpful message so you can see it in logs & browser
+  //   if (err && err.missingEnv) {
+  //     return res.status(500).send(`OAuth config error: ${err.message}`);
+  //   }
+  //   return res.status(500).send("Internal Server Error");
+  // }
 };
 
 export const googleCallback = async (req, res) => {
