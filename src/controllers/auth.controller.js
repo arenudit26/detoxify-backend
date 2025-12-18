@@ -5,13 +5,13 @@ import { google } from "googleapis";
 function createOAuthClient() {
   const clientId = process.env.GOOGLE_CLIENT_ID;
   const clientSecret = process.env.GOOGLE_CLIENT_SECRET;
-  const redirectUri = process.env.OAUTH_REDIRECT_URI || process.env.GOOGLE_CALLBACK_URL;
+  const redirectUri = process.env.OAUTH_REDIRECT_URI ;
 
   if (!clientId || !clientSecret || !redirectUri) {
     const missing = [
       !clientId && "GOOGLE_CLIENT_ID",
       !clientSecret && "GOOGLE_CLIENT_SECRET",
-      !redirectUri && "(OAUTH_REDIRECT_URI or GOOGLE_CALLBACK_URL)"
+      !redirectUri && "(OAUTH_REDIRECT_URI)"
     ].filter(Boolean);
     const msg = `Missing env vars: ${missing.join(", ")}`;
     const e = new Error(msg);
