@@ -1,51 +1,51 @@
-// controllers/auth.controller.js
-import { google } from "googleapis";
+// // controllers/auth.controller.js
+// // import { google } from "googleapis";
 
-// Helper to create OAuth2 client on demand
-function createOAuthClient() {
-  const clientId = process.env.GOOGLE_CLIENT_ID;
-  const clientSecret = process.env.GOOGLE_CLIENT_SECRET;
-  const redirectUri = process.env.OAUTH_REDIRECT_URI ;
+// // Helper to create OAuth2 client on demand
+// function createOAuthClient() {
+//   const clientId = process.env.GOOGLE_CLIENT_ID;
+//   const clientSecret = process.env.GOOGLE_CLIENT_SECRET;
+//   const redirectUri = process.env.OAUTH_REDIRECT_URI ;
 
-  if (!clientId || !clientSecret || !redirectUri) {
-    const missing = [
-      !clientId && "GOOGLE_CLIENT_ID",
-      !clientSecret && "GOOGLE_CLIENT_SECRET",
-      !redirectUri && "(OAUTH_REDIRECT_URI)"
-    ].filter(Boolean);
-    const msg = `Missing env vars: ${missing.join(", ")}`;
-    const e = new Error(msg);
-    e.missingEnv = true;
-    throw e;
-  }
+//   if (!clientId || !clientSecret || !redirectUri) {
+//     const missing = [
+//       !clientId && "GOOGLE_CLIENT_ID",
+//       !clientSecret && "GOOGLE_CLIENT_SECRET",
+//       !redirectUri && "(OAUTH_REDIRECT_URI)"
+//     ].filter(Boolean);
+//     const msg = `Missing env vars: ${missing.join(", ")}`;
+//     const e = new Error(msg);
+//     e.missingEnv = true;
+//     throw e;
+//   }
 
-  return new google.auth.OAuth2(clientId, clientSecret, redirectUri);
-}
+//   return new google.auth.OAuth2(clientId, clientSecret, redirectUri);
+// }
 
-const FRONTEND_ORIGIN = process.env.FRONTEND_ORIGIN ;
+// const FRONTEND_ORIGIN = process.env.FRONTEND_ORIGIN ;
 
-export const loginWithGoogle = (req, res) => {
-  try {
-    const oauth2Client = createOAuthClient();
+// export const loginWithGoogle = (req, res) => {
+//   try {
+//     const oauth2Client = createOAuthClient();
 
-    const scopes = [
-      "https://www.googleapis.com/auth/userinfo.profile",
-      "https://www.googleapis.com/auth/userinfo.email",
-      "openid"
-    ];
+//     const scopes = [
+//       "https://www.googleapis.com/auth/userinfo.profile",
+//       "https://www.googleapis.com/auth/userinfo.email",
+//       "openid"
+//     ];
 
-    const url = oauth2Client.generateAuthUrl({
-      access_type: "offline",
-      prompt: "consent",
-      scope: scopes
-    });
+//     const url = oauth2Client.generateAuthUrl({
+//       access_type: "offline",
+//       prompt: "consent",
+//       scope: scopes
+//     });
 
-    return res.redirect(url);
-  } catch (err) {
-    console.error("loginWithGoogle error:", err);
-    return res.status(500).send("OAuth init failed");
-  }
-};
+//     return res.redirect(url);
+//   } catch (err) {
+//     console.error("loginWithGoogle error:", err);
+//     return res.status(500).send("OAuth init failed");
+//   }
+// };
 
 
 // export const loginWithGoogle = (req, res) => {
